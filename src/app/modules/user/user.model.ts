@@ -1,53 +1,27 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
-import { TUser, UserModel } from './user.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
+import { TUser } from './user.interface';
 
 const userSchema = new Schema<TUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: {
-    type: String,
+  authId: {
+    type: Schema.Types.ObjectId,
     required: true,
-    select: 0,
+    unique: true,
+    ref: 'Auth',
   },
-  phone: { type: String, required: true },
-  role: {
+  email: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  bio: { type: String },
+  profileImage: { type: String },
+  phoneNumber: { type: String },
+  gender: {
     type: String,
-    enum: ['super-admin', 'admin', 'user'],
+    enum: ['male', 'female'],
   },
-  address: { type: String, required: true },
+  dateOfBirth: { type: String },
+  following: { type: String },
+  follower: { type: String },
+  isPro: { type: Boolean },
 });
 
-userSchema.pre('save', async function (next) {
-  // hashing password and save into DB
-  this.password = await bcrypt.hash(
-    this.password,
-    Number(config.bcrypt_salt_rounds),
-  );
-  next();
-});
-
-// Modify toJSON method to remove the password
-userSchema.methods.toJSON = function () {
-  const user = this;
-  const userObject = user.toObject();
-
-  delete userObject.password;
-  delete userObject.__v;
-  return userObject;
-};
-
-userSchema.statics.isUserExist = async function (email: string) {
-  return User.findOne({ email }).select('+password');
-};
-
-userSchema.statics.isPasswordMatched = async function (
-  password: string,
-  hashedPassword: string,
-) {
-  return await bcrypt.compare(password, hashedPassword);
-};
-
-export const User = model<TUser, UserModel>('User', userSchema);
+export const User = model<TUser>('User', userSchema);

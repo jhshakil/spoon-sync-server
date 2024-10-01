@@ -1,5 +1,4 @@
-export const USER_ROLE = {
-  user: 'user',
-  admin: 'admin',
-  superAdmin: 'super-admin',
+export const USER_GENDER = {
+  male: 'male',
+  female: 'female',
 } as const;

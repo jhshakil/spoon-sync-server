@@ -5,11 +5,6 @@ import { UserControllers } from './user.controller';
 
 const router = Router();
 
-router.post(
-  '/signup',
-  validateRequest(UserValidations.createUserValidationSchema),
-  UserControllers.createUser,
-);
 router.get('/user', UserControllers.getAllUser);
 router.get('/user/:email', UserControllers.getUser);
 router.patch(

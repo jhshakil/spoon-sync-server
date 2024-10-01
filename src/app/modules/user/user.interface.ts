@@ -1,19 +1,19 @@
 /* eslint-disable no-unused-vars */
-import { Model } from 'mongoose';
-import { USER_ROLE } from './user.constant';
+import { Types } from 'mongoose';
+import { USER_GENDER } from './user.constant';
 
 export type TUser = {
-  name: string;
+  authId: Types.ObjectId;
   email: string;
-  password: string;
-  phone: string;
-  role: 'super-admin' | 'admin' | 'user';
-  address: string;
+  name: string;
+  bio: string;
+  profileImage: string;
+  phoneNumber: string;
+  gender: TGender;
+  dateOfBirth: string;
+  isPro: boolean;
+  following: string;
+  follower: string;
 };
 
-export interface UserModel extends Model<TUser> {
-  isUserExist(email: string): Promise<TUser>;
-  isPasswordMatched(password: string, hashedPassword: string): Promise<boolean>;
-}
-
-export type TUserRole = keyof typeof USER_ROLE;
+export type TGender = keyof typeof USER_GENDER;
