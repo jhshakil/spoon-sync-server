@@ -7,6 +7,7 @@ import { createToken, verifyToken } from './auth.utils';
 import config from '../../config';
 import { Auth } from './auth.modal';
 import mongoose from 'mongoose';
+import { Admin } from '../admin/admin.model';
 
 const createUserIntoDB = async (payload: TAuth) => {
   const session = await mongoose.startSession();
@@ -39,6 +40,44 @@ const createUserIntoDB = async (payload: TAuth) => {
     await session.endSession();
 
     return user;
+  } catch (err: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(err);
+  }
+};
+
+const createAdminIntoDB = async (payload: TAuth) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // create a user (transaction-1)
+    const auth = await Auth.create([payload], { session });
+
+    //create a student
+    if (!auth.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create admin');
+    }
+
+    const newAdmin = {
+      name: payload.name,
+      authId: auth[0]._id,
+      email: payload.email,
+    };
+
+    // create a student (transaction-2)
+    const admin = await Admin.create([newAdmin], { session });
+
+    if (!admin.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create admin');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return admin;
   } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
@@ -126,6 +165,7 @@ const refreshToken = async (token: string) => {
 
 export const AuthServices = {
   createUserIntoDB,
+  createAdminIntoDB,
   loginUser,
   refreshToken,
 };

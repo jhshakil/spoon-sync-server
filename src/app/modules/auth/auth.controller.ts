@@ -13,6 +13,15 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+const createAdmin = catchAsync(async (req, res) => {
+  await AuthServices.createAdminIntoDB(req.body);
+
+  sendResponse(res, {
+    message: 'Adm,in create successfully',
+    data: '',
+  });
+});
+
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
   const { refreshToken, accessToken, user } = result;
@@ -47,6 +56,7 @@ const refreshToken = catchAsync(async (req, res) => {
 
 export const AuthControllers = {
   createUser,
+  createAdmin,
   loginUser,
   refreshToken,
 };
