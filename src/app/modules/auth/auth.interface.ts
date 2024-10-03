@@ -10,7 +10,7 @@ export type TLoginUser = {
 export type TAuth = {
   name: string;
   email: string;
-  userName: string;
+  username: string;
   password: string;
   passwordChangedAt?: Date;
   role: TRole;

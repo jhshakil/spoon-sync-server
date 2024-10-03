@@ -4,7 +4,7 @@ import { Auth } from '../modules/auth/auth.modal';
 
 const superUser = {
   name: 'Super Admin',
-  userName: 'super-admin112',
+  username: 'super-admin112',
   email: config.super_admin_email,
   password: config.super_admin_password,
   role: AUTH_ROLE.superAdmin,

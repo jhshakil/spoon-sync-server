@@ -8,7 +8,7 @@ const authSchema = new Schema<TAuth>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    userName: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
     password: {
       type: String,
       required: true,
