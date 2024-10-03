@@ -36,10 +36,27 @@ const createUserIntoDB = async (payload: TAuth) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
     }
 
+    const jwtPayload = {
+      email: payload.email,
+      username: payload.username,
+      role: auth[0].role,
+    };
+    const accessToken = createToken(
+      jwtPayload,
+      config.jwt_access_secret as string,
+      config.jwt_access_expires_in as string,
+    );
+
+    const refreshToken = createToken(
+      jwtPayload,
+      config.jwt_refresh_secret as string,
+      config.jwt_refresh_expires_in as string,
+    );
+
     await session.commitTransaction();
     await session.endSession();
 
-    return user;
+    return { accessToken, refreshToken };
   } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
@@ -74,10 +91,27 @@ const createAdminIntoDB = async (payload: TAuth) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create admin');
     }
 
+    const jwtPayload = {
+      email: payload.email,
+      username: payload.username,
+      role: auth[0].role,
+    };
+    const accessToken = createToken(
+      jwtPayload,
+      config.jwt_access_secret as string,
+      config.jwt_access_expires_in as string,
+    );
+
+    const refreshToken = createToken(
+      jwtPayload,
+      config.jwt_refresh_secret as string,
+      config.jwt_refresh_expires_in as string,
+    );
+
     await session.commitTransaction();
     await session.endSession();
 
-    return admin;
+    return { accessToken, refreshToken };
   } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
@@ -112,7 +146,7 @@ const loginUser = async (payload: TLoginUser) => {
     config.jwt_refresh_expires_in as string,
   );
 
-  return { accessToken, refreshToken, user };
+  return { accessToken, refreshToken };
 };
 
 const refreshToken = async (token: string) => {

@@ -5,8 +5,8 @@ import catchAsync from '../utils/catchAsync';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { NextFunction, Request, Response } from 'express';
-import { User } from '../modules/user/user.model';
-import { TUserRole } from '../modules/user/user.interface';
+import { TRole } from '../modules/auth/auth.interface';
+import { Auth } from '../modules/auth/auth.modal';
 
 declare global {
   namespace Express {
@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-const auth = (...requiredRoles: TUserRole[]) => {
+const auth = (...requiredRoles: TRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
@@ -34,7 +34,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
     ) as JwtPayload;
 
     //   checking if the user is exist
-    const user = await User.isUserExist(decoded?.email);
+    const user = await Auth.isUserExist(decoded?.email);
 
     if (!user)
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');

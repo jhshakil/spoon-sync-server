@@ -5,26 +5,26 @@ import config from '../../config';
 import sendResponse from '../../utils/sendResponse';
 
 const createUser = catchAsync(async (req, res) => {
-  await AuthServices.createUserIntoDB(req.body);
+  const result = await AuthServices.createUserIntoDB(req.body);
 
   sendResponse(res, {
     message: 'User create successfully',
-    data: '',
+    data: result,
   });
 });
 
 const createAdmin = catchAsync(async (req, res) => {
-  await AuthServices.createAdminIntoDB(req.body);
+  const result = await AuthServices.createAdminIntoDB(req.body);
 
   sendResponse(res, {
-    message: 'Adm,in create successfully',
-    data: '',
+    message: 'Admin create successfully',
+    data: result,
   });
 });
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
-  const { refreshToken, accessToken, user } = result;
+  const { refreshToken } = result;
 
   res.cookie('refreshToken', refreshToken, {
     secure: config.node_env === 'production',
@@ -37,8 +37,7 @@ const loginUser = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: 'User logged in successfully',
-    token: accessToken,
-    data: user,
+    data: result,
   });
 });
 

@@ -5,10 +5,10 @@ import { UserControllers } from './user.controller';
 
 const router = Router();
 
-router.get('/user', UserControllers.getAllUser);
-router.get('/user/:email', UserControllers.getUser);
+router.get('/', UserControllers.getAllUser);
+router.get('/:email', UserControllers.getUser);
 router.patch(
-  '/user/:email',
+  '/:email',
   validateRequest(UserValidations.updateUserValidationSchema),
   UserControllers.updateUser,
 );

@@ -12,7 +12,11 @@ const userSchema = new Schema<TUser>({
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   bio: { type: String },
-  profileImage: { type: String },
+  profileImage: {
+    type: String,
+    default:
+      'https://firebasestorage.googleapis.com/v0/b/spoon-sync-image.appspot.com/o/files%2Fa974d006-66a2-4205-b42f-12cc14141b8f?alt=media&token=f61c46c8-f5a9-4df0-8b8c-32ebb361aa75',
+  },
   phoneNumber: { type: String },
   gender: {
     type: String,
