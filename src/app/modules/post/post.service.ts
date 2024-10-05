@@ -6,6 +6,18 @@ const createPostIntoDB = async (payload: TPost) => {
   return post;
 };
 
+const getAllPostFromDB = async () => {
+  const post = await Post.find();
+  return post;
+};
+
+const getPostByEmailFromDB = async (email: string) => {
+  const post = await Post.find({ email });
+  return post;
+};
+
 export const PostServices = {
   createPostIntoDB,
+  getAllPostFromDB,
+  getPostByEmailFromDB,
 };
