@@ -16,8 +16,14 @@ const getPostByEmailFromDB = async (email: string) => {
   return post;
 };
 
+const getSinglePostFromDB = async (id: string) => {
+  const post = await Post.findById({ _id: id });
+  return post;
+};
+
 export const PostServices = {
   createPostIntoDB,
   getAllPostFromDB,
   getPostByEmailFromDB,
+  getSinglePostFromDB,
 };

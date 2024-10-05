@@ -10,7 +10,8 @@ router.post(
   validateRequest(PostValidations.createPostSchema),
   PostControllers.createPost,
 );
-router.post('/', PostControllers.getAllPost);
-router.post('/:email', PostControllers.getPostByEmail);
+router.get('/', PostControllers.getAllPost);
+router.get('/:email', PostControllers.getPostByEmail);
+router.get('/single/:id', PostControllers.getSinglePost);
 
 export const PostRoutes = router;

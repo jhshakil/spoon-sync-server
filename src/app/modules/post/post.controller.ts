@@ -26,9 +26,18 @@ const getPostByEmail = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getSinglePost = catchAsync(async (req, res) => {
+  const result = await PostServices.getSinglePostFromDB(req.params.id);
+
+  sendResponse(res, {
+    message: 'Post get successfully',
+    data: result,
+  });
+});
 
 export const PostControllers = {
   createPost,
   getAllPost,
   getPostByEmail,
+  getSinglePost,
 };
