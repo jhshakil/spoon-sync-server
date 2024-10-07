@@ -26,6 +26,17 @@ const userSchema = new Schema<TUser>({
   following: { type: String },
   follower: { type: String },
   isPro: { type: Boolean },
+  isDeleted: { type: Boolean, default: false },
+});
+
+userSchema.pre('find', function (next) {
+  this.find({ authId: { isDeleted: { $ne: true } } });
+  next();
+});
+userSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+
+  next();
 });
 
 export const User = model<TUser>('User', userSchema);

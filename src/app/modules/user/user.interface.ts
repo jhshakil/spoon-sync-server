@@ -14,6 +14,7 @@ export type TUser = {
   isPro: boolean;
   following: string;
   follower: string;
+  isDeleted: boolean;
 };
 
 export type TGender = keyof typeof USER_GENDER;

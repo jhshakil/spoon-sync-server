@@ -6,4 +6,5 @@ export type TAdmin = {
   name: string;
   profileImage: string;
   phoneNumber: string;
+  isDeleted: boolean;
 };

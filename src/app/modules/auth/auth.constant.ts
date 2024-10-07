@@ -6,6 +6,5 @@ export const AUTH_ROLE = {
 
 export const AUTH_STATUS = {
   active: 'active',
-  inActive: 'inActive',
   blocked: 'blocked',
 } as const;

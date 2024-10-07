@@ -22,16 +22,25 @@ const authSchema = new Schema<TAuth>(
     },
     status: {
       type: String,
-      enum: ['active', 'inActive', 'blocked'],
+      enum: ['active', 'blocked'],
       default: 'active',
     },
     isDeleted: { type: Boolean, default: false },
-    isBlocked: { type: Boolean, default: false },
   },
   {
     timestamps: true,
   },
 );
+
+authSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+authSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+
+  next();
+});
 
 authSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(

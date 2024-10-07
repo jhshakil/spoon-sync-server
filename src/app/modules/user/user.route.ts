@@ -12,5 +12,7 @@ router.patch(
   validateRequest(UserValidations.updateUserValidationSchema),
   UserControllers.updateUser,
 );
+router.patch('/status/:email', UserControllers.updateUserStatus);
+router.delete('/:email', UserControllers.deleteUser);
 
 export const UserRoutes = router;

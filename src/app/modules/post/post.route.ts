@@ -17,4 +17,11 @@ router.get('/', PostControllers.getAllPost);
 router.get('/:email', PostControllers.getPostByEmail);
 router.get('/single/:id', PostControllers.getSinglePost);
 
+router.patch(
+  '/:id',
+  validateRequest(PostValidations.updatePostSchema),
+  PostControllers.updatePost,
+);
+router.delete('/:id', PostControllers.deletePost);
+
 export const PostRoutes = router;

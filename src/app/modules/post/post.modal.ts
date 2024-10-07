@@ -13,11 +13,21 @@ const postSchema = new Schema<TPost>(
       enum: ['published', 'draft', 'blocked'],
       default: 'published',
     },
-    isDelete: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
   },
 );
+
+postSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+postSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+
+  next();
+});
 
 export const Post = model<TPost>('Post', postSchema);

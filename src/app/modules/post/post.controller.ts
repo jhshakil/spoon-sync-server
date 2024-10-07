@@ -35,9 +35,29 @@ const getSinglePost = catchAsync(async (req, res) => {
   });
 });
 
+const updatePost = catchAsync(async (req, res) => {
+  const result = await PostServices.updatePostIntoDB(req.params.id, req.body);
+
+  sendResponse(res, {
+    message: 'Post update successfully',
+    data: result,
+  });
+});
+
+const deletePost = catchAsync(async (req, res) => {
+  const result = await PostServices.deletePostFromDB(req.params.id);
+
+  sendResponse(res, {
+    message: 'Post delete successfully',
+    data: result,
+  });
+});
+
 export const PostControllers = {
   createPost,
   getAllPost,
   getPostByEmail,
   getSinglePost,
+  updatePost,
+  deletePost,
 };

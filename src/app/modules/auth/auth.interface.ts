@@ -16,7 +16,6 @@ export type TAuth = {
   role: TRole;
   status: TStatus;
   isDeleted: boolean;
-  isBlocked: boolean;
 };
 
 export interface AuthModel extends Model<TAuth> {

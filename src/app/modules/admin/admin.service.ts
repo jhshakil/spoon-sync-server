@@ -2,7 +2,7 @@ import { TAdmin } from './admin.interface';
 import { Admin } from './admin.model';
 
 const getAllAdminIntoDB = async () => {
-  const admin = await Admin.find();
+  const admin = await Admin.find().populate('authId');
   return admin;
 };
 

@@ -7,7 +7,7 @@ export type TPost = {
   content: string;
   tags: string[];
   status: TStatus;
-  isDelete: boolean;
+  isDeleted: boolean;
 };
 
 export type TStatus = keyof typeof POST_STATUS;
