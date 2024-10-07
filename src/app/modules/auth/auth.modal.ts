@@ -26,6 +26,7 @@ const authSchema = new Schema<TAuth>(
       default: 'active',
     },
     isDeleted: { type: Boolean, default: false },
+    isBlocked: { type: Boolean, default: false },
   },
   {
     timestamps: true,

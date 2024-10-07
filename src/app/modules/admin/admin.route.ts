@@ -5,12 +5,12 @@ import { AdminValidations } from './admin.validation';
 
 const router = Router();
 
-router.get('/admin', AdminControllers.getAllAdmin);
-router.get('/admin/:email', AdminControllers.getAdmin);
+router.get('/', AdminControllers.getAllAdmin);
+router.get('/:email', AdminControllers.getAdmin);
 router.patch(
-  '/user/:email',
+  '/:email',
   validateRequest(AdminValidations.updateAdminValidationSchema),
   AdminControllers.updateAdmin,
 );
 
-export const UserRoutes = router;
+export const AdminRoutes = router;

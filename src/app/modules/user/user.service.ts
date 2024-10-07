@@ -2,7 +2,7 @@ import { TUser } from './user.interface';
 import { User } from './user.model';
 
 const getAllUserIntoDB = async () => {
-  const user = await User.find();
+  const user = await User.find().populate('authId');
   return user;
 };
 
