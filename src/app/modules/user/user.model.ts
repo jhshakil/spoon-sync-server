@@ -30,7 +30,7 @@ const userSchema = new Schema<TUser>({
 });
 
 userSchema.pre('find', function (next) {
-  this.find({ authId: { isDeleted: { $ne: true } } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 userSchema.pre('findOne', function (next) {

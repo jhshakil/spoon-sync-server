@@ -24,7 +24,7 @@ const updateUserFromDB = async (email: string, payload: TUser) => {
 const updateUserStatusIntoDB = async (email: string, payload: TAuth) => {
   const result = await Auth.findOneAndUpdate({ email }, payload, {
     new: true,
-  }).populate('authId');
+  });
   return result;
 };
 
