@@ -14,11 +14,11 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const createAdmin = catchAsync(async (req, res) => {
-  const result = await AuthServices.createAdminIntoDB(req.body);
+  await AuthServices.createAdminIntoDB(req.body);
 
   sendResponse(res, {
     message: 'Admin create successfully',
-    data: result,
+    data: '',
   });
 });
 

@@ -2,6 +2,8 @@ import { Router } from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { AuthValidations } from './auth.validation';
 import { AuthControllers } from './auth.controller';
+import auth from '../../middlewares/auth';
+import { AUTH_ROLE } from './auth.constant';
 
 const router = Router();
 
@@ -12,6 +14,7 @@ router.post(
 );
 router.post(
   '/create-admin',
+  auth(AUTH_ROLE.superAdmin),
   validateRequest(AuthValidations.createUserValidationSchema),
   AuthControllers.createAdmin,
 );
