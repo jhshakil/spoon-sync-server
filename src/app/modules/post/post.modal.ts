@@ -1,5 +1,22 @@
 import { model, Schema } from 'mongoose';
-import { TPost } from './post.interface';
+import { TAction, TComment, TPost } from './post.interface';
+
+const actionSchema = new Schema<TAction>({
+  type: { type: String, enum: ['up', 'down'] },
+  authId: {
+    type: Schema.Types.ObjectId,
+    unique: true,
+    ref: 'Auth',
+  },
+});
+
+const commentSchema = new Schema<TComment>({
+  text: { type: String },
+  authId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Auth',
+  },
+});
 
 const postSchema = new Schema<TPost>(
   {
@@ -14,6 +31,11 @@ const postSchema = new Schema<TPost>(
       default: 'published',
     },
     isDeleted: { type: Boolean, default: false },
+    totalUpVote: { type: String },
+    totalDownVote: { type: String },
+    totalComment: { type: String },
+    action: [actionSchema],
+    comment: [commentSchema],
   },
   {
     timestamps: true,
