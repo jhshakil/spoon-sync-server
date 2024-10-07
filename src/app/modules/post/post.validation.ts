@@ -7,8 +7,7 @@ const createPostSchema = z.object({
     thumbnail: z.string(),
     content: z.string(),
     tags: z.array(z.string()),
-    isPublished: z.boolean(),
-    isBlocked: z.boolean(),
+    status: z.enum(['published', 'draft', 'blocked']),
   }),
 });
 

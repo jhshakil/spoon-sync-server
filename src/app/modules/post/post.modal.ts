@@ -8,8 +8,12 @@ const postSchema = new Schema<TPost>(
     thumbnail: { type: String },
     content: { type: String },
     tags: [{ type: String }],
-    isPublished: { type: Boolean },
-    isBlocked: { type: Boolean, default: false },
+    status: {
+      type: String,
+      enum: ['published', 'draft', 'blocked'],
+      default: 'published',
+    },
+    isDelete: { type: Boolean, default: false },
   },
   {
     timestamps: true,
