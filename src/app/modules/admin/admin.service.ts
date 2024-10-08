@@ -1,3 +1,5 @@
+import { TAuth } from '../auth/auth.interface';
+import { Auth } from '../auth/auth.modal';
 import { TAdmin } from './admin.interface';
 import { Admin } from './admin.model';
 
@@ -19,8 +21,27 @@ const updateAdminFromDB = async (email: string, payload: TAdmin) => {
   return result;
 };
 
+const updateAdminStatusIntoDB = async (email: string, payload: TAuth) => {
+  const result = await Auth.findOneAndUpdate({ email }, payload, {
+    new: true,
+  });
+  return result;
+};
+
+const deleteAdminFromDB = async (email: string) => {
+  await Auth.findOneAndUpdate({ email }, { isDeleted: true }, { new: true });
+  const admin = await Admin.findOneAndUpdate(
+    { email },
+    { isDeleted: true },
+    { new: true },
+  );
+  return admin;
+};
+
 export const AdminServices = {
   getAllAdminIntoDB,
   getAdminIntoDB,
   updateAdminFromDB,
+  updateAdminStatusIntoDB,
+  deleteAdminFromDB,
 };

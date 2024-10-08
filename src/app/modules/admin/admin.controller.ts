@@ -39,8 +39,31 @@ const updateAdmin = catchAsync(async (req, res) => {
       });
 });
 
+const updateAdminStatus = catchAsync(async (req, res) => {
+  const result = await AdminServices.updateAdminStatusIntoDB(
+    req.params.email,
+    req.body,
+  );
+
+  sendResponse(res, {
+    message: 'Status update successfully',
+    data: result,
+  });
+});
+
+const deleteAdmin = catchAsync(async (req, res) => {
+  const result = await AdminServices.deleteAdminFromDB(req.params.email);
+
+  sendResponse(res, {
+    message: 'Admin delete successfully',
+    data: result,
+  });
+});
+
 export const AdminControllers = {
   getAllAdmin,
   getAdmin,
   updateAdmin,
+  updateAdminStatus,
+  deleteAdmin,
 };
