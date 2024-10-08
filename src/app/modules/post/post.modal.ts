@@ -5,7 +5,6 @@ const actionSchema = new Schema<TAction>({
   type: { type: String, enum: ['up', 'down'] },
   authId: {
     type: Schema.Types.ObjectId,
-    unique: true,
     ref: 'Auth',
   },
 });
@@ -43,9 +42,9 @@ const postSchema = new Schema<TPost>(
     totalDownVote: { type: String, default: '' },
     totalComment: { type: String, default: '' },
     averageRatting: { type: String, default: '' },
-    action: [actionSchema],
-    comment: [commentSchema],
-    ratting: [rattingSchema],
+    action: { type: [actionSchema], default: [] },
+    comment: { type: [commentSchema], default: [] },
+    ratting: { type: [rattingSchema], default: [] },
   },
   {
     timestamps: true,
