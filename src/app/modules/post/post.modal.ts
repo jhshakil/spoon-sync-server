@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { TAction, TComment, TPost } from './post.interface';
+import { TAction, TComment, TPost, TRatting } from './post.interface';
 
 const actionSchema = new Schema<TAction>({
   type: { type: String, enum: ['up', 'down'] },
@@ -12,6 +12,14 @@ const actionSchema = new Schema<TAction>({
 
 const commentSchema = new Schema<TComment>({
   text: { type: String },
+  authId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Auth',
+  },
+});
+
+const rattingSchema = new Schema<TRatting>({
+  count: { type: String },
   authId: {
     type: Schema.Types.ObjectId,
     ref: 'Auth',
@@ -31,11 +39,13 @@ const postSchema = new Schema<TPost>(
       default: 'published',
     },
     isDeleted: { type: Boolean, default: false },
-    totalUpVote: { type: String },
-    totalDownVote: { type: String },
-    totalComment: { type: String },
+    totalUpVote: { type: String, default: '' },
+    totalDownVote: { type: String, default: '' },
+    totalComment: { type: String, default: '' },
+    averageRatting: { type: String, default: '' },
     action: [actionSchema],
     comment: [commentSchema],
+    ratting: [rattingSchema],
   },
   {
     timestamps: true,

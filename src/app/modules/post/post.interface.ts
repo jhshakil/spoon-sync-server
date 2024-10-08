@@ -12,8 +12,10 @@ export type TPost = {
   totalUpVote: string;
   totalDownVote: string;
   totalComment: string;
+  averageRatting: string;
   action: TAction[];
   comment: TComment[];
+  ratting: TRatting[];
 };
 
 export type TAction = {
@@ -23,6 +25,11 @@ export type TAction = {
 
 export type TComment = {
   text: string;
+  authId: Types.ObjectId;
+};
+
+export type TRatting = {
+  count: string;
   authId: Types.ObjectId;
 };
 
