@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { TAction, TComment, TPost, TRatting } from './post.interface';
+import { TAction, TComment, TPost, TRatting, TTag } from './post.interface';
 
 const actionSchema = new Schema<TAction>({
   type: { type: String, enum: ['up', 'down'] },
@@ -25,13 +25,18 @@ const rattingSchema = new Schema<TRatting>({
   },
 });
 
+const tagSchema = new Schema<TTag>({
+  id: { type: String },
+  text: { type: String },
+});
+
 const postSchema = new Schema<TPost>(
   {
     email: { type: String, required: true },
     title: { type: String, required: true },
     thumbnail: { type: String },
     content: { type: String },
-    tags: [{ type: String }],
+    tags: { type: [tagSchema], default: [] },
     status: {
       type: String,
       enum: ['published', 'draft', 'blocked'],

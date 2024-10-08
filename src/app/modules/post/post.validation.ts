@@ -6,7 +6,12 @@ const createPostSchema = z.object({
     title: z.string(),
     thumbnail: z.string(),
     content: z.string(),
-    tags: z.array(z.string()),
+    tags: z.array(
+      z.object({
+        id: z.string(),
+        text: z.string(),
+      }),
+    ),
     status: z.enum(['published', 'draft', 'blocked']),
   }),
 });
@@ -17,7 +22,14 @@ const updatePostSchema = z.object({
     title: z.string().optional(),
     thumbnail: z.string().optional(),
     content: z.string().optional(),
-    tags: z.array(z.string()).optional(),
+    tags: z
+      .array(
+        z.object({
+          id: z.string(),
+          text: z.string(),
+        }),
+      )
+      .optional(),
     status: z.enum(['published', 'draft', 'blocked']).optional(),
   }),
 });

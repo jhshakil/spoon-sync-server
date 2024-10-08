@@ -6,7 +6,7 @@ export type TPost = {
   title: string;
   thumbnail: string;
   content: string;
-  tags: string[];
+  tags: TTag[];
   status: TStatus;
   isDeleted: boolean;
   totalUpVote: string;
@@ -16,6 +16,11 @@ export type TPost = {
   action: TAction[];
   comment: TComment[];
   ratting: TRatting[];
+};
+
+export type TTag = {
+  id: string;
+  text: string;
 };
 
 export type TAction = {
