@@ -54,10 +54,18 @@ const updateCommentPostSchema = z.object({
   }),
 });
 
+const createRattingPostSchema = z.object({
+  body: z.object({
+    count: z.string(),
+    userId: z.string(),
+  }),
+});
+
 export const PostValidations = {
   createPostSchema,
   updatePostSchema,
   actionPostSchema,
   createCommentPostSchema,
   updateCommentPostSchema,
+  createRattingPostSchema,
 };

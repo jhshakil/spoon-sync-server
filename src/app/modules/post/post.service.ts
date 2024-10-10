@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { TAction, TComment, TPost } from './post.interface';
+import { TAction, TComment, TPost, TRatting } from './post.interface';
 import { Post } from './post.modal';
 
 const createPostIntoDB = async (payload: TPost) => {
@@ -233,6 +233,71 @@ const deleteCommentPostIntoDB = async (id: string, cid: string) => {
 
   return updatedPost;
 };
+
+const updateRattingPostIntoDB = async (
+  id: string,
+  payload: Partial<TRatting>,
+) => {
+  let updatedPost;
+
+  const rate = await Post.findOne({
+    _id: id,
+    ratting: {
+      $elemMatch: {
+        userId: payload.userId,
+      },
+    },
+  });
+
+  if (rate) {
+    updatedPost = await Post.findOneAndUpdate(
+      {
+        _id: id,
+        ratting: {
+          $elemMatch: {
+            userId: payload.userId,
+          },
+        },
+      },
+      { $set: { 'ratting.$.count': payload.count } },
+      { new: true, useFindAndModify: false },
+    );
+  } else {
+    updatedPost = await Post.findByIdAndUpdate(
+      { _id: id },
+      { $addToSet: { ratting: payload } },
+      { new: true, useFindAndModify: false },
+    );
+  }
+
+  const average = await Post.aggregate([
+    { $match: { _id: new Types.ObjectId(id) } },
+    {
+      $project: {
+        average: {
+          $avg: {
+            $map: {
+              input: '$ratting',
+              as: 'ratting',
+              in: { $toDouble: '$$ratting.count' },
+            },
+          },
+        },
+      },
+    },
+  ]);
+
+  updatedPost = await Post.findByIdAndUpdate(
+    { _id: id },
+    {
+      averageRatting: average[0]?.average || 0,
+    },
+    { new: true, useFindAndModify: false },
+  );
+
+  return updatedPost;
+};
+
 export const PostServices = {
   createPostIntoDB,
   getAllPostFromDB,
@@ -244,4 +309,5 @@ export const PostServices = {
   createCommentPostIntoDB,
   updateCommentPostIntoDB,
   deleteCommentPostIntoDB,
+  updateRattingPostIntoDB,
 };

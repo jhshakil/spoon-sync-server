@@ -41,5 +41,10 @@ router.patch(
   PostControllers.updateCommentPost,
 );
 router.delete('/comment/:id', PostControllers.deleteCommentPost);
+router.post(
+  '/ratting/:id',
+  validateRequest(PostValidations.createRattingPostSchema),
+  PostControllers.updateRattingPost,
+);
 
 export const PostRoutes = router;

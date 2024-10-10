@@ -97,6 +97,18 @@ const deleteCommentPost = catchAsync(async (req, res) => {
   });
 });
 
+const updateRattingPost = catchAsync(async (req, res) => {
+  const result = await PostServices.updateRattingPostIntoDB(
+    req.params.id,
+    req.body,
+  );
+
+  sendResponse(res, {
+    message: 'Ratting successfully',
+    data: result,
+  });
+});
+
 export const PostControllers = {
   createPost,
   getAllPost,
@@ -108,4 +120,5 @@ export const PostControllers = {
   createCommentPost,
   updateCommentPost,
   deleteCommentPost,
+  updateRattingPost,
 };
