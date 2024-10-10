@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { TAction, TPost } from './post.interface';
+import { TAction, TComment, TPost } from './post.interface';
 import { Post } from './post.modal';
 
 const createPostIntoDB = async (payload: TPost) => {
@@ -8,17 +8,27 @@ const createPostIntoDB = async (payload: TPost) => {
 };
 
 const getAllPostFromDB = async () => {
-  const post = await Post.find();
+  const post = await Post.find().populate('userId').populate({
+    path: 'comment.userId',
+    select: 'name',
+  });
+
   return post;
 };
 
 const getPostByEmailFromDB = async (email: string) => {
-  const post = await Post.find({ email });
+  const post = await Post.find({ email }).populate('userId').populate({
+    path: 'comment.userId',
+    select: 'name',
+  });
   return post;
 };
 
 const getSinglePostFromDB = async (id: string) => {
-  const post = await Post.findById({ _id: id });
+  const post = await Post.findById({ _id: id }).populate('userId').populate({
+    path: 'comment.userId',
+    select: 'name',
+  });
   return post;
 };
 
@@ -39,11 +49,14 @@ const deletePostFromDB = async (id: string) => {
 };
 
 const actionPostIntoDB = async (id: string, payload: TAction) => {
-  // Check if the action already exists (same authId and type)
   const fullMatched = await Post.findOne({
     _id: id,
-    'action.authId': payload.authId,
-    'action.type': payload.type,
+    action: {
+      $elemMatch: {
+        userId: payload.userId,
+        type: payload.type,
+      },
+    },
   });
 
   let updatedPost;
@@ -53,7 +66,7 @@ const actionPostIntoDB = async (id: string, payload: TAction) => {
     updatedPost = await Post.findByIdAndUpdate(
       { _id: id },
       {
-        $pull: { action: { authId: payload.authId, type: payload.type } },
+        $pull: { action: { userId: payload.userId, type: payload.type } },
       },
       { new: true, useFindAndModify: false },
     );
@@ -61,13 +74,24 @@ const actionPostIntoDB = async (id: string, payload: TAction) => {
     // Check if the user has any action, but with a different type (update the vote)
     const tag = await Post.findOne({
       _id: id,
-      'action.authId': payload.authId,
+      action: {
+        $elemMatch: {
+          userId: payload.userId,
+        },
+      },
     });
 
     if (tag) {
       // Update the existing action's type (i.e., change up to down or vice versa)
       updatedPost = await Post.findOneAndUpdate(
-        { _id: id, 'action.authId': payload.authId },
+        {
+          _id: id,
+          action: {
+            $elemMatch: {
+              userId: payload.userId,
+            },
+          },
+        },
         { $set: { 'action.$.type': payload.type } },
         { new: true, useFindAndModify: false },
       );
@@ -129,6 +153,34 @@ const actionPostIntoDB = async (id: string, payload: TAction) => {
   return updatedPost;
 };
 
+const createCommentPostIntoDB = async (id: string, payload: TComment) => {
+  let updatedPost;
+
+  updatedPost = await Post.findByIdAndUpdate(
+    { _id: id },
+    { $addToSet: { comment: payload } },
+    { new: true, useFindAndModify: false },
+  );
+
+  const total = await Post.aggregate([
+    { $match: { _id: new Types.ObjectId(id) } },
+    {
+      $project: {
+        total: { $size: '$comment' },
+      },
+    },
+  ]);
+
+  updatedPost = await Post.findByIdAndUpdate(
+    { _id: id },
+    {
+      totalComment: total[0]?.total || 0,
+    },
+    { new: true, useFindAndModify: false },
+  );
+
+  return updatedPost;
+};
 export const PostServices = {
   createPostIntoDB,
   getAllPostFromDB,
@@ -137,4 +189,5 @@ export const PostServices = {
   updatePostIntoDB,
   deletePostFromDB,
   actionPostIntoDB,
+  createCommentPostIntoDB,
 };

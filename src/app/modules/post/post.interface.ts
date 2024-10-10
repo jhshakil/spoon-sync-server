@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { POST_STATUS } from './post.constant';
 
 export type TPost = {
+  userId: Types.ObjectId;
   email: string;
   title: string;
   thumbnail: string;
@@ -25,17 +26,17 @@ export type TTag = {
 
 export type TAction = {
   type: 'up' | 'down';
-  authId: Types.ObjectId;
+  userId: Types.ObjectId;
 };
 
 export type TComment = {
   text: string;
-  authId: Types.ObjectId;
+  userId: Types.ObjectId;
 };
 
 export type TRatting = {
   count: string;
-  authId: Types.ObjectId;
+  userId: Types.ObjectId;
 };
 
 export type TStatus = keyof typeof POST_STATUS;

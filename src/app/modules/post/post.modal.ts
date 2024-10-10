@@ -3,25 +3,25 @@ import { TAction, TComment, TPost, TRatting, TTag } from './post.interface';
 
 const actionSchema = new Schema<TAction>({
   type: { type: String, enum: ['up', 'down'] },
-  authId: {
+  userId: {
     type: Schema.Types.ObjectId,
-    ref: 'Auth',
+    ref: 'User',
   },
 });
 
 const commentSchema = new Schema<TComment>({
   text: { type: String },
-  authId: {
+  userId: {
     type: Schema.Types.ObjectId,
-    ref: 'Auth',
+    ref: 'User',
   },
 });
 
 const rattingSchema = new Schema<TRatting>({
   count: { type: String },
-  authId: {
+  userId: {
     type: Schema.Types.ObjectId,
-    ref: 'Auth',
+    ref: 'User',
   },
 });
 
@@ -32,6 +32,7 @@ const tagSchema = new Schema<TTag>({
 
 const postSchema = new Schema<TPost>(
   {
+    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
     email: { type: String, required: true },
     title: { type: String, required: true },
     thumbnail: { type: String },
@@ -43,9 +44,9 @@ const postSchema = new Schema<TPost>(
       default: 'published',
     },
     isDeleted: { type: Boolean, default: false },
-    totalUpVote: { type: String, default: '' },
-    totalDownVote: { type: String, default: '' },
-    totalComment: { type: String, default: '' },
+    totalUpVote: { type: String, default: '0' },
+    totalDownVote: { type: String, default: '0' },
+    totalComment: { type: String, default: '0' },
     averageRatting: { type: String, default: '' },
     action: { type: [actionSchema], default: [] },
     comment: { type: [commentSchema], default: [] },

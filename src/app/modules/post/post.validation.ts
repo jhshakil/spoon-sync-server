@@ -37,7 +37,14 @@ const updatePostSchema = z.object({
 const actionPostSchema = z.object({
   body: z.object({
     type: z.enum(['up', 'down']),
-    authId: z.string(),
+    userId: z.string(),
+  }),
+});
+
+const createCommentPostSchema = z.object({
+  body: z.object({
+    text: z.string(),
+    userId: z.string(),
   }),
 });
 
@@ -45,4 +52,5 @@ export const PostValidations = {
   createPostSchema,
   updatePostSchema,
   actionPostSchema,
+  createCommentPostSchema,
 };

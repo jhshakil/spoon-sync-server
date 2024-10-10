@@ -30,4 +30,10 @@ router.post(
   PostControllers.actionPost,
 );
 
+router.post(
+  '/comment/:id',
+  validateRequest(PostValidations.createCommentPostSchema),
+  PostControllers.createCommentPost,
+);
+
 export const PostRoutes = router;

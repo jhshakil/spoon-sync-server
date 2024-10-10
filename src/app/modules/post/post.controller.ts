@@ -62,6 +62,18 @@ const actionPost = catchAsync(async (req, res) => {
   });
 });
 
+const createCommentPost = catchAsync(async (req, res) => {
+  const result = await PostServices.createCommentPostIntoDB(
+    req.params.id,
+    req.body,
+  );
+
+  sendResponse(res, {
+    message: 'Comment successfully',
+    data: result,
+  });
+});
+
 export const PostControllers = {
   createPost,
   getAllPost,
@@ -70,4 +82,5 @@ export const PostControllers = {
   updatePost,
   deletePost,
   actionPost,
+  createCommentPost,
 };
