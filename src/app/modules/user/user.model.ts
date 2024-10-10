@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
-import { TUser } from './user.interface';
+import { TFollow, TUser } from './user.interface';
+
+const followSchema = new Schema<TFollow>({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+});
 
 const userSchema = new Schema<TUser>({
   authId: {
@@ -23,9 +30,12 @@ const userSchema = new Schema<TUser>({
     enum: ['male', 'female'],
   },
   dateOfBirth: { type: String },
-  following: { type: String },
-  follower: { type: String },
+  totalFollower: { type: String, default: '0' },
+  totalFollowing: { type: String, default: '0' },
+  follower: { type: [followSchema], default: [] },
+  following: { type: [followSchema], default: [] },
   isPro: { type: Boolean },
+  proValidity: { type: String },
   isDeleted: { type: Boolean, default: false },
 });
 

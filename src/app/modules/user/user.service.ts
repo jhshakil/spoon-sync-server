@@ -1,6 +1,6 @@
 import { TAuth } from '../auth/auth.interface';
 import { Auth } from '../auth/auth.modal';
-import { TUser } from './user.interface';
+import { TFollow, TUser } from './user.interface';
 import { User } from './user.model';
 
 const getAllUserIntoDB = async () => {
@@ -38,10 +38,41 @@ const deleteUserFromDB = async (email: string) => {
   return user;
 };
 
+const getAllUnFollowUserIntoDB = async (email: string) => {
+  const allUser = await User.find({ email: { $ne: email } });
+  const singleUser = await User.findOne({ email }, 'following');
+
+  const result = allUser?.filter(
+    (user) =>
+      !singleUser?.following.find((follow) => follow.userId.equals(user._id)),
+  );
+  return result;
+};
+
+const followUserIntoDB = async (email: string, payload: TFollow) => {
+  await User.findOneAndUpdate(
+    { email: email },
+    { $addToSet: { following: payload } },
+    { new: true, useFindAndModify: false },
+  );
+
+  const newUser = await User.findById({ _id: payload.userId });
+  const myUserId = await User.findOne({ email });
+
+  await User.findOneAndUpdate(
+    { email: newUser?.email },
+    { $addToSet: { follower: { userId: myUserId?._id } } },
+    { new: true, useFindAndModify: false },
+  );
+  return '';
+};
+
 export const UserServices = {
   getAllUserIntoDB,
   getUserIntoDB,
   updateUserFromDB,
   updateUserStatusIntoDB,
   deleteUserFromDB,
+  getAllUnFollowUserIntoDB,
+  followUserIntoDB,
 };

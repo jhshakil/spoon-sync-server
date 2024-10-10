@@ -11,10 +11,17 @@ export type TUser = {
   phoneNumber: string;
   gender: TGender;
   dateOfBirth: string;
+  totalFollower: string;
+  totalFollowing: string;
+  follower: TFollow[];
+  following: TFollow[];
   isPro: boolean;
-  following: string;
-  follower: string;
+  proValidity: string;
   isDeleted: boolean;
 };
 
 export type TGender = keyof typeof USER_GENDER;
+
+export type TFollow = {
+  userId: Types.ObjectId;
+};

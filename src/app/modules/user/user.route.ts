@@ -25,4 +25,11 @@ router.delete(
   UserControllers.deleteUser,
 );
 
+router.get('/unfollow-user/:email', UserControllers.getAllUnFollowUser);
+router.post(
+  '/follow/:email',
+  validateRequest(UserValidations.followValidationSchema),
+  UserControllers.followUser,
+);
+
 export const UserRoutes = router;

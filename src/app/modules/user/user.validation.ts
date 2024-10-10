@@ -12,6 +12,13 @@ const updateUserValidationSchema = z.object({
   }),
 });
 
+const followValidationSchema = z.object({
+  body: z.object({
+    userId: z.string(),
+  }),
+});
+
 export const UserValidations = {
   updateUserValidationSchema,
+  followValidationSchema,
 };
