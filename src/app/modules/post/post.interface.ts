@@ -30,6 +30,7 @@ export type TAction = {
 };
 
 export type TComment = {
+  _id?: string;
   text: string;
   userId: Types.ObjectId;
 };

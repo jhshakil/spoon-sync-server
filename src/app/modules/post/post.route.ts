@@ -35,5 +35,11 @@ router.post(
   validateRequest(PostValidations.createCommentPostSchema),
   PostControllers.createCommentPost,
 );
+router.patch(
+  '/comment/:id',
+  validateRequest(PostValidations.updateCommentPostSchema),
+  PostControllers.updateCommentPost,
+);
+router.delete('/comment/:id', PostControllers.deleteCommentPost);
 
 export const PostRoutes = router;

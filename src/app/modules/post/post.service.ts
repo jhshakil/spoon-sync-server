@@ -181,6 +181,58 @@ const createCommentPostIntoDB = async (id: string, payload: TComment) => {
 
   return updatedPost;
 };
+
+const updateCommentPostIntoDB = async (
+  id: string,
+  cid: string,
+  payload: Partial<TComment>,
+) => {
+  const updatedPost = await Post.findOneAndUpdate(
+    {
+      _id: id,
+      comment: {
+        $elemMatch: {
+          _id: cid,
+        },
+      },
+    },
+    { $set: { 'comment.$.text': payload.text } },
+    { new: true, useFindAndModify: false },
+  );
+
+  return updatedPost;
+};
+
+const deleteCommentPostIntoDB = async (id: string, cid: string) => {
+  let updatedPost;
+
+  updatedPost = await Post.findByIdAndUpdate(
+    { _id: id },
+    {
+      $pull: { comment: { _id: new Types.ObjectId(cid) } },
+    },
+    { new: true },
+  );
+
+  const total = await Post.aggregate([
+    { $match: { _id: new Types.ObjectId(id) } },
+    {
+      $project: {
+        total: { $size: '$comment' },
+      },
+    },
+  ]);
+
+  updatedPost = await Post.findByIdAndUpdate(
+    { _id: id },
+    {
+      totalComment: total[0]?.total || 0,
+    },
+    { new: true },
+  );
+
+  return updatedPost;
+};
 export const PostServices = {
   createPostIntoDB,
   getAllPostFromDB,
@@ -190,4 +242,6 @@ export const PostServices = {
   deletePostFromDB,
   actionPostIntoDB,
   createCommentPostIntoDB,
+  updateCommentPostIntoDB,
+  deleteCommentPostIntoDB,
 };

@@ -9,13 +9,18 @@ const actionSchema = new Schema<TAction>({
   },
 });
 
-const commentSchema = new Schema<TComment>({
-  text: { type: String },
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+const commentSchema = new Schema<TComment>(
+  {
+    text: { type: String },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
-});
+  {
+    timestamps: true,
+  },
+);
 
 const rattingSchema = new Schema<TRatting>({
   count: { type: String },

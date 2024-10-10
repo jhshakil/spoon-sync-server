@@ -48,9 +48,16 @@ const createCommentPostSchema = z.object({
   }),
 });
 
+const updateCommentPostSchema = z.object({
+  body: z.object({
+    text: z.string(),
+  }),
+});
+
 export const PostValidations = {
   createPostSchema,
   updatePostSchema,
   actionPostSchema,
   createCommentPostSchema,
+  updateCommentPostSchema,
 };

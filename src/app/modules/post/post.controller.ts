@@ -74,6 +74,29 @@ const createCommentPost = catchAsync(async (req, res) => {
   });
 });
 
+const updateCommentPost = catchAsync(async (req, res) => {
+  const cid = req.query?.cid as string;
+  const result = await PostServices.updateCommentPostIntoDB(
+    req.params.id,
+    cid,
+    req.body,
+  );
+
+  sendResponse(res, {
+    message: 'Comment update successfully',
+    data: result,
+  });
+});
+const deleteCommentPost = catchAsync(async (req, res) => {
+  const cid = req.query?.cid as string;
+  const result = await PostServices.deleteCommentPostIntoDB(req.params.id, cid);
+
+  sendResponse(res, {
+    message: 'Comment delete successfully',
+    data: result,
+  });
+});
+
 export const PostControllers = {
   createPost,
   getAllPost,
@@ -83,4 +106,6 @@ export const PostControllers = {
   deletePost,
   actionPost,
   createCommentPost,
+  updateCommentPost,
+  deleteCommentPost,
 };
