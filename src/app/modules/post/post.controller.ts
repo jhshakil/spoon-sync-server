@@ -53,6 +53,15 @@ const deletePost = catchAsync(async (req, res) => {
   });
 });
 
+const actionPost = catchAsync(async (req, res) => {
+  const result = await PostServices.actionPostIntoDB(req.params.id, req.body);
+
+  sendResponse(res, {
+    message: 'Action successfully',
+    data: result,
+  });
+});
+
 export const PostControllers = {
   createPost,
   getAllPost,
@@ -60,4 +69,5 @@ export const PostControllers = {
   getSinglePost,
   updatePost,
   deletePost,
+  actionPost,
 };

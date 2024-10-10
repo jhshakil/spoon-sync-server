@@ -24,4 +24,10 @@ router.patch(
 );
 router.delete('/:id', PostControllers.deletePost);
 
+router.post(
+  '/action/:id',
+  validateRequest(PostValidations.actionPostSchema),
+  PostControllers.actionPost,
+);
+
 export const PostRoutes = router;

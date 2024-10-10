@@ -34,7 +34,15 @@ const updatePostSchema = z.object({
   }),
 });
 
+const actionPostSchema = z.object({
+  body: z.object({
+    type: z.enum(['up', 'down']),
+    authId: z.string(),
+  }),
+});
+
 export const PostValidations = {
   createPostSchema,
   updatePostSchema,
+  actionPostSchema,
 };
