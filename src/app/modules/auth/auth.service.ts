@@ -11,6 +11,15 @@ import { Admin } from '../admin/admin.model';
 import { sendEmail } from '../../utils/emailSender';
 import bcrypt from 'bcrypt';
 
+const checkUniqUserName = async (payload: { userName: string }) => {
+  const user = await Auth.findOne({ username: payload.userName });
+  if (user) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'User name already exist');
+  }
+
+  return true;
+};
+
 const createUserIntoDB = async (payload: TAuth) => {
   const session = await mongoose.startSession();
 
@@ -202,7 +211,7 @@ const forgetPassword = async (payload: { email: string }) => {
   await sendEmail(
     user.email,
     `<p><a href="${config.frontend_url}/reset-password?key=${accessToken}">Click here</a> to forget password </p>`,
-    `Do not share this email anywhere`,
+    `Spoon Sync Forget Password`,
   );
 
   return user;
@@ -228,4 +237,5 @@ export const AuthServices = {
   refreshToken,
   forgetPassword,
   resetPassword,
+  checkUniqUserName,
 };

@@ -8,19 +8,34 @@ const createPostIntoDB = async (payload: TPost) => {
 };
 
 const getAllPostFromDB = async () => {
-  const post = await Post.find().populate('userId').populate({
-    path: 'comment.userId',
-    select: 'name',
-  });
+  const post = await Post.find()
+    .populate('userId')
+    .populate({
+      path: 'comment.userId',
+      select: 'name',
+    })
+    .sort({ createdAt: -1 });
+
+  //   const productQuery = new QueryBuilder(Post.find(), query)
+  //   .search(facilitySearchableFields)
+  //   .filterLimit('pricePerHour')
+  //   .filter()
+  //   .sort()
+  //   .paginate()
+  //   .fields();
+  // const result = await productQuery.modelQuery;
 
   return post;
 };
 
 const getPostByEmailFromDB = async (email: string) => {
-  const post = await Post.find({ email }).populate('userId').populate({
-    path: 'comment.userId',
-    select: 'name',
-  });
+  const post = await Post.find({ email })
+    .populate('userId')
+    .populate({
+      path: 'comment.userId',
+      select: 'name',
+    })
+    .sort({ createdAt: -1 });
   return post;
 };
 

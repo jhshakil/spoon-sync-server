@@ -5,6 +5,7 @@ export const sendEmail = async (
   email: string,
   html: string,
   subject: string,
+  from = '"Spoon Sync" <info.jhshakil@gmail.com>',
 ) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -20,7 +21,7 @@ export const sendEmail = async (
   });
 
   await transporter.sendMail({
-    from: '"Spoon Sync" <info.jhshakil@gmail.com>',
+    from: from,
     to: email,
     subject,
     html,
