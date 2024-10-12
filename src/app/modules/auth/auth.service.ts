@@ -8,6 +8,8 @@ import config from '../../config';
 import { Auth } from './auth.modal';
 import mongoose from 'mongoose';
 import { Admin } from '../admin/admin.model';
+import { sendEmail } from '../../utils/emailSender';
+import bcrypt from 'bcrypt';
 
 const createUserIntoDB = async (payload: TAuth) => {
   const session = await mongoose.startSession();
@@ -181,9 +183,49 @@ const refreshToken = async (token: string) => {
   };
 };
 
+const forgetPassword = async (payload: { email: string }) => {
+  const user = await Auth.findOne({ email: payload.email });
+  if (!user) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'User not found');
+  }
+
+  const jwtPayload = {
+    email: user.email,
+    role: user.role,
+  };
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    '2min',
+  );
+
+  await sendEmail(
+    user.email,
+    `<p><a href="${config.frontend_url}/reset-password?key=${accessToken}">Click here</a> to forget password </p>`,
+    `Do not share this email anywhere`,
+  );
+
+  return user;
+};
+
+const resetPassword = async (payload: { email: string; password: string }) => {
+  const newPassword = await bcrypt.hash(
+    payload.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  const user = Auth.findOneAndUpdate(
+    { email: payload.email },
+    { password: newPassword },
+  );
+
+  return user;
+};
+
 export const AuthServices = {
   createUserIntoDB,
   createAdminIntoDB,
   loginUser,
   refreshToken,
+  forgetPassword,
+  resetPassword,
 };

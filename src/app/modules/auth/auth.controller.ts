@@ -53,9 +53,29 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
+const forgetPassword = catchAsync(async (req, res) => {
+  await AuthServices.forgetPassword(req.body);
+
+  sendResponse(res, {
+    message: 'Please check your email',
+    data: '',
+  });
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+  await AuthServices.resetPassword(req.body);
+
+  sendResponse(res, {
+    message: 'Please login again',
+    data: '',
+  });
+});
+
 export const AuthControllers = {
   createUser,
   createAdmin,
   loginUser,
   refreshToken,
+  forgetPassword,
+  resetPassword,
 };
