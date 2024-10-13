@@ -18,7 +18,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
         .populate('userId')
         .populate({
           path: 'comment.userId',
-          select: 'name',
+          select: 'name email isPro profileImage',
         })
         .sort({ createdAt: -1 });
     } else {
@@ -29,7 +29,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
           .populate('userId')
           .populate({
             path: 'comment.userId',
-            select: 'name',
+            select: 'name email isPro profileImage',
           })
           .sort({ createdAt: -1 });
       } else {
@@ -40,7 +40,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
           .populate('userId')
           .populate({
             path: 'comment.userId',
-            select: 'name',
+            select: 'name email isPro profileImage',
           })
           .sort({ createdAt: -1 });
       }
@@ -50,7 +50,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
       .populate('userId')
       .populate({
         path: 'comment.userId',
-        select: 'name',
+        select: 'name email isPro profileImage',
       })
       .sort({ createdAt: -1 });
   }
