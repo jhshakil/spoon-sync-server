@@ -23,10 +23,11 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
             path: 'comment.userId',
             select: 'name email isPro profileImage',
           })
-          .sort({ createdAt: -1 })
           .limit(5),
         query,
-      ).search(postSearchableFields);
+      )
+        .search(postSearchableFields)
+        .sort();
       post = await productQuery.modelQuery;
     } else {
       const generalUser = await User.findOne({ email: query.user });
@@ -39,10 +40,11 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
               path: 'comment.userId',
               select: 'name email isPro profileImage',
             })
-            .sort({ createdAt: -1 })
             .limit(5),
           query,
-        ).search(postSearchableFields);
+        )
+          .search(postSearchableFields)
+          .sort();
         post = await productQuery.modelQuery;
       } else {
         const productQuery = new QueryBuilder(
@@ -52,10 +54,11 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
               path: 'comment.userId',
               select: 'name email isPro profileImage',
             })
-            .sort({ createdAt: -1 })
             .limit(5),
           query,
-        ).search(postSearchableFields);
+        )
+          .search(postSearchableFields)
+          .sort();
         post = await productQuery.modelQuery;
       }
     }
@@ -67,10 +70,11 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
           path: 'comment.userId',
           select: 'name email isPro profileImage',
         })
-        .sort({ createdAt: -1 })
         .limit(5),
       query,
-    ).search(postSearchableFields);
+    )
+      .search(postSearchableFields)
+      .sort();
     post = await productQuery.modelQuery;
   }
 
