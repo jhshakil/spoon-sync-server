@@ -1,4 +1,3 @@
-
 <div align="center">
   <h1>Project Overview</h1>
 </div>
@@ -6,22 +5,19 @@
 ---
 
 # Project Name
-SP Booking Server
+
+Spoon Sync
 
 ## Introduction
 
-SP Booking is a sports facility booking platform
-
-## Project Description
-
-SP Booking is a digital solution designed to streamline the process of booking and managing sports facilities. These platforms serve as a centralized hub where users can easily find, reserve, and pay for access to various sports amenities.
+Spoon Sync Recipe sharing platform
 
 ## Features
 
 - Authentication system
 - User management system
-- Create and maintain Facility
-- Create and maintain Booking
+- Create and maintain Post
+- Follow and UnFollow
 - Implement aamar pay payment service
 
 ## Technology Stack
@@ -50,17 +46,22 @@ SP Booking is a digital solution designed to streamline the process of booking a
 2. Add necessary configuration variables in the `.env` file (example in `.env.example` file).
    Example:
    ```bash
-    NODE_ENV=development
-    PORT=3030
-    DATABASE_URL=
-    BCRYPT_SALT_ROUNDS=
-    JWT_ACCESS_SECRET =
-    JWT_REFRESH_SECRET =
-    JWT_ACCESS_EXPIRES_IN=
-    JWT_REFRESH_EXPIRES_IN=
-    STORE_ID=
-    SIGNETURE_KEY=
-    PAYMENT_URL=
-    PAYMENT_VERIFY_URL=
-    FRONTEND_URL=
+   NODE_ENV=
+   PORT=
+   DATABASE_URL=
+   BCRYPT_SALT_ROUNDS=
+   JWT_ACCESS_SECRET =
+   JWT_REFRESH_SECRET =
+   JWT_ACCESS_EXPIRES_IN=
+   JWT_REFRESH_EXPIRES_IN=
+   STORE_ID=
+   SIGNETURE_KEY=
+   PAYMENT_URL=
+   PAYMENT_VERIFY_URL=
+   FRONTEND_URL=
+   BACKEND_URL=
+   SUPER_ADMIN_EMAIL=
+   SUPER_ADMIN_PASSWORD=
+   SENDER_EMAIL=
+   SENDER_APP_PASS=
    ```
