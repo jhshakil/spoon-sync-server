@@ -69,6 +69,15 @@ const getAllUnFollowUser = catchAsync(async (req, res) => {
   });
 });
 
+const getAllFollowUser = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllFollowUserIntoDB(req.params.email);
+
+  sendResponse(res, {
+    message: 'Get user successfully',
+    data: result,
+  });
+});
+
 const followUser = catchAsync(async (req, res) => {
   const result = await UserServices.followUserIntoDB(
     req.params.email,
@@ -76,7 +85,19 @@ const followUser = catchAsync(async (req, res) => {
   );
 
   sendResponse(res, {
-    message: 'User follow successfuly',
+    message: 'User follow successfully',
+    data: result,
+  });
+});
+
+const unFollowUser = catchAsync(async (req, res) => {
+  const result = await UserServices.unFollowUserIntoDB(
+    req.params.email,
+    req.body,
+  );
+
+  sendResponse(res, {
+    message: 'User unFollow successfully',
     data: result,
   });
 });
@@ -88,5 +109,7 @@ export const UserControllers = {
   updateUserStatus,
   deleteUser,
   getAllUnFollowUser,
+  getAllFollowUser,
   followUser,
+  unFollowUser,
 };
