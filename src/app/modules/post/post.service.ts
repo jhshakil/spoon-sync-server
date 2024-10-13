@@ -1,20 +1,59 @@
 import { Types } from 'mongoose';
 import { TAction, TComment, TPost, TRatting } from './post.interface';
 import { Post } from './post.modal';
+import { Auth } from '../auth/auth.modal';
+import { User } from '../user/user.model';
 
 const createPostIntoDB = async (payload: TPost) => {
   const post = await Post.create(payload);
   return post;
 };
 
-const getAllPostFromDB = async () => {
-  const post = await Post.find()
-    .populate('userId')
-    .populate({
-      path: 'comment.userId',
-      select: 'name',
-    })
-    .sort({ createdAt: -1 });
+const getAllPostFromDB = async (query: Record<string, unknown>) => {
+  let post;
+  if (query.user) {
+    const user = await Auth.findOne({ email: query.user });
+    if (user && (user.role === 'admin' || user.role === 'superAdmin')) {
+      post = await Post.find({ status: { $ne: 'draft' } })
+        .populate('userId')
+        .populate({
+          path: 'comment.userId',
+          select: 'name',
+        })
+        .sort({ createdAt: -1 });
+    } else {
+      const generalUser = await User.findOne({ email: query.user });
+
+      if (generalUser && generalUser.isPro) {
+        post = await Post.find({ status: { $ne: 'draft' } })
+          .populate('userId')
+          .populate({
+            path: 'comment.userId',
+            select: 'name',
+          })
+          .sort({ createdAt: -1 });
+      } else {
+        post = await Post.find({
+          status: { $ne: 'draft' },
+          isPro: { $ne: true },
+        })
+          .populate('userId')
+          .populate({
+            path: 'comment.userId',
+            select: 'name',
+          })
+          .sort({ createdAt: -1 });
+      }
+    }
+  } else {
+    post = await Post.find({ status: { $ne: 'draft' }, isPro: { $ne: true } })
+      .populate('userId')
+      .populate({
+        path: 'comment.userId',
+        select: 'name',
+      })
+      .sort({ createdAt: -1 });
+  }
 
   //   const productQuery = new QueryBuilder(Post.find(), query)
   //   .search(facilitySearchableFields)
