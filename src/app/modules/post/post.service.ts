@@ -3,6 +3,8 @@ import { TAction, TComment, TPost, TRatting } from './post.interface';
 import { Post } from './post.modal';
 import { Auth } from '../auth/auth.modal';
 import { User } from '../user/user.model';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { postSearchableFields } from './post.constant';
 
 const createPostIntoDB = async (payload: TPost) => {
   const post = await Post.create(payload);
@@ -14,55 +16,63 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
   if (query.user) {
     const user = await Auth.findOne({ email: query.user });
     if (user && (user.role === 'admin' || user.role === 'superAdmin')) {
-      post = await Post.find({ status: { $ne: 'draft' } })
+      const productQuery = new QueryBuilder(
+        Post.find({ status: { $ne: 'draft' } })
+          .populate('userId')
+          .populate({
+            path: 'comment.userId',
+            select: 'name email isPro profileImage',
+          })
+          .sort({ createdAt: -1 })
+          .limit(5),
+        query,
+      ).search(postSearchableFields);
+      post = await productQuery.modelQuery;
+    } else {
+      const generalUser = await User.findOne({ email: query.user });
+
+      if (generalUser && generalUser.isPro) {
+        const productQuery = new QueryBuilder(
+          Post.find({ status: { $ne: 'draft' } })
+            .populate('userId')
+            .populate({
+              path: 'comment.userId',
+              select: 'name email isPro profileImage',
+            })
+            .sort({ createdAt: -1 })
+            .limit(5),
+          query,
+        ).search(postSearchableFields);
+        post = await productQuery.modelQuery;
+      } else {
+        const productQuery = new QueryBuilder(
+          Post.find({ status: { $ne: 'draft' }, isPro: { $ne: true } })
+            .populate('userId')
+            .populate({
+              path: 'comment.userId',
+              select: 'name email isPro profileImage',
+            })
+            .sort({ createdAt: -1 })
+            .limit(5),
+          query,
+        ).search(postSearchableFields);
+        post = await productQuery.modelQuery;
+      }
+    }
+  } else {
+    const productQuery = new QueryBuilder(
+      Post.find({ status: { $ne: 'draft' }, isPro: { $ne: true } })
         .populate('userId')
         .populate({
           path: 'comment.userId',
           select: 'name email isPro profileImage',
         })
-        .sort({ createdAt: -1 });
-    } else {
-      const generalUser = await User.findOne({ email: query.user });
-
-      if (generalUser && generalUser.isPro) {
-        post = await Post.find({ status: { $ne: 'draft' } })
-          .populate('userId')
-          .populate({
-            path: 'comment.userId',
-            select: 'name email isPro profileImage',
-          })
-          .sort({ createdAt: -1 });
-      } else {
-        post = await Post.find({
-          status: { $ne: 'draft' },
-          isPro: { $ne: true },
-        })
-          .populate('userId')
-          .populate({
-            path: 'comment.userId',
-            select: 'name email isPro profileImage',
-          })
-          .sort({ createdAt: -1 });
-      }
-    }
-  } else {
-    post = await Post.find({ status: { $ne: 'draft' }, isPro: { $ne: true } })
-      .populate('userId')
-      .populate({
-        path: 'comment.userId',
-        select: 'name email isPro profileImage',
-      })
-      .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .limit(5),
+      query,
+    ).search(postSearchableFields);
+    post = await productQuery.modelQuery;
   }
-
-  //   const productQuery = new QueryBuilder(Post.find(), query)
-  //   .search(facilitySearchableFields)
-  //   .filterLimit('pricePerHour')
-  //   .filter()
-  //   .sort()
-  //   .paginate()
-  //   .fields();
-  // const result = await productQuery.modelQuery;
 
   return post;
 };

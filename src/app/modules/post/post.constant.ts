@@ -4,4 +4,4 @@ export const POST_STATUS = {
   blocked: 'blocked',
 } as const;
 
-export const postSearchableFields = ['name', 'location'];
+export const postSearchableFields = ['title'];
