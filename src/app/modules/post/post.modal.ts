@@ -49,6 +49,7 @@ const postSchema = new Schema<TPost>(
       default: 'published',
     },
     isDeleted: { type: Boolean, default: false },
+    isPro: { type: Boolean, default: false },
     totalUpVote: { type: String, default: '0' },
     totalDownVote: { type: String, default: '0' },
     totalComment: { type: String, default: '0' },

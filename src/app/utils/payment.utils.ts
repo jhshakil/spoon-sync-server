@@ -6,9 +6,9 @@ dotenv.config();
 type TPaymentData = {
   transactionId: string;
   totalPrice: number;
-  customerName: string;
+  customerName?: string;
   customerEmail: string;
-  customerPhone: string;
+  customerPhone?: string;
 };
 
 export const initiatePayment = async (paymentData: TPaymentData) => {
@@ -17,21 +17,21 @@ export const initiatePayment = async (paymentData: TPaymentData) => {
       store_id: process.env.STORE_ID,
       signature_key: process.env.SIGNETURE_KEY,
       tran_id: paymentData.transactionId,
-      success_url: `${process.env.FRONTEND_URL}/api/bookings/confirmation?transactionId=${paymentData.transactionId}`,
-      fail_url: `${process.env.FRONTEND_URL}/api/bookings/confirmation`,
+      success_url: `${process.env.BACKEND_URL}/api/payment/confirmation?transactionId=${paymentData.transactionId}`,
+      fail_url: `${process.env.BACKEND_URL}/api/payment/confirmation`,
       cancel_url: process.env.FRONTEND_URL,
       amount: paymentData.totalPrice,
       currency: 'BDT',
       desc: 'Merchant Registration Payment',
-      cus_name: paymentData.customerName,
-      cus_email: paymentData.customerEmail,
+      cus_name: paymentData?.customerName || 'N/A',
+      cus_email: paymentData?.customerEmail,
       cus_add1: 'N/A',
       cus_add2: 'N/A',
       cus_city: 'N/A',
       cus_state: 'N/A',
       cus_postcode: 'N/A',
       cus_country: 'N/A',
-      cus_phone: paymentData.customerPhone,
+      cus_phone: paymentData.customerPhone || 'N/A',
       type: 'json',
     });
 

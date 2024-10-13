@@ -17,6 +17,7 @@ export type TUser = {
   following: TFollow[];
   isPro: boolean;
   proValidity: string;
+  transactionId: string;
   isDeleted: boolean;
 };
 

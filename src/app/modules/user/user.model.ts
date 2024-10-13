@@ -36,6 +36,7 @@ const userSchema = new Schema<TUser>({
   following: { type: [followSchema], default: [] },
   isPro: { type: Boolean },
   proValidity: { type: String },
+  transactionId: { type: String, default: '' },
   isDeleted: { type: Boolean, default: false },
 });
 
