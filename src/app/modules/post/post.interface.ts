@@ -3,6 +3,7 @@ import { POST_STATUS } from './post.constant';
 
 export type TPost = {
   userId: Types.ObjectId;
+  groupId?: Types.ObjectId;
   email: string;
   title: string;
   thumbnail: string;

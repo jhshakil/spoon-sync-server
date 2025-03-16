@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { AUTH_ROLE, AUTH_STATUS } from './auth.constant';
 
 export type TLoginUser = {
@@ -8,6 +8,7 @@ export type TLoginUser = {
 };
 
 export type TAuth = {
+  _id?: Types.ObjectId;
   name: string;
   email: string;
   username: string;
