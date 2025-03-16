@@ -5,6 +5,7 @@ import { PostRoutes } from '../modules/post/post.route';
 import { AdminRoutes } from '../modules/admin/admin.route';
 import { ContactRouters } from '../modules/contact/contact.route';
 import { PaymentRoutes } from '../modules/payment/payment.route';
+import { GroupRoutes } from '../modules/group/group.route';
 
 const router = Router();
 
@@ -32,6 +33,10 @@ const moduleRoutes = [
   {
     path: '/payment',
     route: PaymentRoutes,
+  },
+  {
+    path: '/group',
+    route: GroupRoutes,
   },
 ];
 
