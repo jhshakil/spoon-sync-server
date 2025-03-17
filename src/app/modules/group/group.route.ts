@@ -18,6 +18,12 @@ router.post(
 // Get all groups
 router.get('/', GroupControllers.getAllGroups);
 
+// Get all groups
+router.get('/joined/:userEmail', GroupControllers.getJoinedGroups);
+
+// Get all groups
+router.get('/dis-joined/:userEmail', GroupControllers.getDisjoinedGroups);
+
 // Get a single group by ID
 router.get('/:groupId', GroupControllers.getGroupById);
 

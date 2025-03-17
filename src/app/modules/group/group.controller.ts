@@ -30,6 +30,38 @@ const getAllGroups = catchAsync(async (req, res) => {
 });
 
 /**
+ * Get all join groups
+ */
+
+const getJoinedGroups = catchAsync(async (req, res) => {
+  const result = await GroupServices.getJoinedGroups(
+    req.query,
+    req.params.userEmail,
+  );
+
+  sendResponse(res, {
+    message: 'Joined groups retrieved successfully',
+    data: result,
+  });
+});
+
+/**
+ * Get all dis join groups
+ */
+
+const getDisjoinedGroups = catchAsync(async (req, res) => {
+  const result = await GroupServices.getDisjoinedGroups(
+    req.query,
+    req.params.userEmail,
+  );
+
+  sendResponse(res, {
+    message: 'Unjoined groups retrieved successfully',
+    data: result,
+  });
+});
+
+/**
  * Get single group by ID
  */
 const getGroupById = catchAsync(async (req, res) => {
@@ -132,6 +164,8 @@ const getPostsByGroupId = catchAsync(async (req, res) => {
 export const GroupControllers = {
   createGroup,
   getAllGroups,
+  getJoinedGroups,
+  getDisjoinedGroups,
   getGroupById,
   updateGroup,
   addAdmin,

@@ -54,6 +54,74 @@ const getAllGroups = async (
 };
 
 /**
+ * Get all join groups
+ */
+
+const getJoinedGroups = async (
+  query: Record<string, unknown>,
+  userEmail: string,
+) => {
+  const existingUser = await User.findOne({ email: userEmail });
+
+  if (!existingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  const filter = {
+    isDeleted: false,
+    $or: [{ members: existingUser._id }, { admins: existingUser._id }],
+  };
+
+  const groupQuery = new QueryBuilder(
+    Group.find(filter)
+      .populate('admins', 'name email profileImage')
+      .populate('members', 'name email profileImage'),
+    query,
+  )
+    .search(['name', 'description'])
+    .filter()
+    .paginate()
+    .sort();
+
+  return await groupQuery.modelQuery;
+};
+
+/**
+ * Get all dis join groups
+ */
+
+const getDisjoinedGroups = async (
+  query: Record<string, unknown>,
+  userEmail: string,
+) => {
+  const existingUser = await User.findOne({ email: userEmail });
+
+  if (!existingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  const filter = {
+    isDeleted: false,
+    members: { $ne: existingUser._id },
+    admins: { $ne: existingUser._id },
+    status: GROUP_STATUS.active,
+  };
+
+  const groupQuery = new QueryBuilder(
+    Group.find(filter)
+      .populate('admins', 'name email')
+      .populate('members', 'name email'),
+    query,
+  )
+    .search(['name', 'description'])
+    .filter()
+    .paginate()
+    .sort();
+
+  return await groupQuery.modelQuery;
+};
+
+/**
  * Get a single group by ID
  */
 const getGroupById = async (groupId: string) => {
@@ -179,6 +247,8 @@ const getPostsByGroupId = async (groupId: string) => {
 export const GroupServices = {
   createGroup,
   getAllGroups,
+  getJoinedGroups,
+  getDisjoinedGroups,
   getGroupById,
   updateGroup,
   addAdmin,
