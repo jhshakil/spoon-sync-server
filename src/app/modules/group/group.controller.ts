@@ -108,7 +108,10 @@ const addAdmin = catchAsync(async (req, res) => {
  * Add a member to the group
  */
 const addMember = catchAsync(async (req, res) => {
-  const result = await GroupServices.addMember(req.params.id, req.body.email);
+  const result = await GroupServices.addMember(
+    req.params.groupId,
+    req.body.email,
+  );
 
   sendResponse(res, {
     message: 'Member added successfully',

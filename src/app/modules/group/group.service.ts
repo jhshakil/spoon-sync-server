@@ -125,7 +125,9 @@ const getDisjoinedGroups = async (
  * Get a single group by ID
  */
 const getGroupById = async (groupId: string) => {
-  const group = await Group.findById(groupId);
+  const group = await Group.findById(groupId)
+    .populate('admins', '_id name email profileImage')
+    .populate('members', '_id name email profileImage');
   if (!group) throw new AppError(httpStatus.NOT_FOUND, 'Group not found');
   return group;
 };
@@ -167,20 +169,28 @@ const addAdmin = async (groupId: string, email: string, user: TAuth) => {
   const group = await Group.findById(groupId);
   if (!group) throw new AppError(httpStatus.NOT_FOUND, 'Group not found');
 
+  // Check if the requesting user is an admin of the group
   if (!group.admins.includes(user._id as ObjectId)) {
     throw new AppError(
       httpStatus.FORBIDDEN,
-      'Only group admins can add another admin',
+      'Only group admins can add or remove another admin',
     );
   }
 
   const newAdmin = await User.findOne({ email });
   if (!newAdmin) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
-  if (!group.admins.includes(newAdmin._id)) {
+  const adminIndex = group.admins.indexOf(newAdmin._id);
+
+  if (adminIndex === -1) {
+    // If the user is not already an admin, add them
     group.admins.push(newAdmin._id);
-    await group.save();
+  } else {
+    // If the user is already an admin, remove them
+    group.admins.splice(adminIndex, 1);
   }
+
+  await group.save();
 
   return group;
 };
@@ -195,10 +205,17 @@ const addMember = async (groupId: string, email: string) => {
   const newMember = await User.findOne({ email });
   if (!newMember) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
-  if (!group.members.includes(newMember._id)) {
+  const memberIndex = group.members.indexOf(newMember._id);
+
+  if (memberIndex === -1) {
+    // If the user is not already a member, add them
     group.members.push(newMember._id);
-    await group.save();
+  } else {
+    // If the user is already a member, remove them
+    group.members.splice(memberIndex, 1);
   }
+
+  await group.save();
 
   return group;
 };
