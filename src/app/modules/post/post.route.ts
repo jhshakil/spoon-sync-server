@@ -14,6 +14,7 @@ router.post(
   PostControllers.createPost,
 );
 router.get('/', PostControllers.getAllPost);
+router.get('/group/:groupId', PostControllers.getPostsByGroupId);
 router.get('/:email', PostControllers.getPostByEmail);
 router.get('/single/:id', PostControllers.getSinglePost);
 

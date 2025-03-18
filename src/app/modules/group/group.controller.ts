@@ -65,8 +65,7 @@ const getDisjoinedGroups = catchAsync(async (req, res) => {
  * Get single group by ID
  */
 const getGroupById = catchAsync(async (req, res) => {
-  const result = await GroupServices.getGroupById(req.params.id);
-
+  const result = await GroupServices.getGroupById(req.params.groupId);
   sendResponse(res, {
     message: 'Group retrieved successfully',
     data: result,
@@ -78,7 +77,7 @@ const getGroupById = catchAsync(async (req, res) => {
  */
 const updateGroup = catchAsync(async (req, res) => {
   const result = await GroupServices.updateGroup(
-    req.params.id,
+    req.params.groupId,
     req.body,
     req.user as TAuth,
   );

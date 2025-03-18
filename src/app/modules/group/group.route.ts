@@ -37,6 +37,7 @@ router.get(
 // Update group details (Only admins)
 router.patch(
   '/:groupId',
+  auth(AUTH_ROLE.user),
   validateRequest(GroupValidations.updateGroupSchema),
   GroupControllers.updateGroup,
 );

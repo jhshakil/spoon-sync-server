@@ -22,8 +22,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
           .populate({
             path: 'comment.userId',
             select: 'name email isPro profileImage',
-          })
-          .limit(5),
+          }),
         query,
       )
         .search(postSearchableFields)
@@ -39,8 +38,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
             .populate({
               path: 'comment.userId',
               select: 'name email isPro profileImage',
-            })
-            .limit(5),
+            }),
           query,
         )
           .search(postSearchableFields)
@@ -53,8 +51,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
             .populate({
               path: 'comment.userId',
               select: 'name email isPro profileImage',
-            })
-            .limit(5),
+            }),
           query,
         )
           .search(postSearchableFields)
@@ -69,8 +66,7 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
         .populate({
           path: 'comment.userId',
           select: 'name email isPro profileImage',
-        })
-        .limit(5),
+        }),
       query,
     )
       .search(postSearchableFields)
@@ -79,6 +75,27 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
   }
 
   return post;
+};
+
+const getPostsByGroupId = async (
+  groupId: string,
+  query: Record<string, unknown>,
+) => {
+  const postQuery = new QueryBuilder(
+    Post.find({ groupId }) // Filter by group ID only
+      .populate('userId', 'name email profileImage')
+      .populate({
+        path: 'comment.userId',
+        select: 'name email profileImage',
+      }),
+    query,
+  )
+    .search(['title', 'content'])
+    .filter()
+    .paginate()
+    .sort();
+
+  return await postQuery.modelQuery;
 };
 
 const getPostByEmailFromDB = async (email: string) => {
@@ -369,6 +386,7 @@ const updateRattingPostIntoDB = async (
 export const PostServices = {
   createPostIntoDB,
   getAllPostFromDB,
+  getPostsByGroupId,
   getPostByEmailFromDB,
   getSinglePostFromDB,
   updatePostIntoDB,

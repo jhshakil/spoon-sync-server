@@ -138,11 +138,17 @@ const updateGroup = async (
   payload: Partial<TGroup>,
   user: TAuth,
 ) => {
-  const group = await Group.findById(groupId);
+  const group = await Group.findById({ _id: groupId });
   if (!group) throw new AppError(httpStatus.NOT_FOUND, 'Group not found');
 
+  const existingUser = await User.findOne({ email: user.email });
+
+  if (!existingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
   // Check if the user is a group admin
-  if (!group.admins.includes(user._id as ObjectId)) {
+  if (!group.admins.includes(existingUser._id as ObjectId)) {
     throw new AppError(
       httpStatus.FORBIDDEN,
       'Only group admins can update this group',

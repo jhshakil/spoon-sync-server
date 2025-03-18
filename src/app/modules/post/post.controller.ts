@@ -18,6 +18,15 @@ const getAllPost = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getPostsByGroupId = catchAsync(async (req, res) => {
+  const { groupId } = req.params;
+  const result = await PostServices.getPostsByGroupId(groupId, req.query);
+
+  sendResponse(res, {
+    message: 'Posts retrieved successfully',
+    data: result,
+  });
+});
 const getPostByEmail = catchAsync(async (req, res) => {
   const result = await PostServices.getPostByEmailFromDB(req.params.email);
 
@@ -112,6 +121,7 @@ const updateRattingPost = catchAsync(async (req, res) => {
 export const PostControllers = {
   createPost,
   getAllPost,
+  getPostsByGroupId,
   getPostByEmail,
   getSinglePost,
   updatePost,
